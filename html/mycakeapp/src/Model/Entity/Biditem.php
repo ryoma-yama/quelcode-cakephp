@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
@@ -37,5 +38,6 @@ class Biditem extends Entity
         'user' => true,
         'bidinfo' => true,
         'bidrequests' => true,
+        'description' => true,
     ];
 }
