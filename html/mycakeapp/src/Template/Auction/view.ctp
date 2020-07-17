@@ -13,6 +13,10 @@
 		<td><?= $this->Number->format($biditem->id) ?></td>
 	</tr>
 	<tr>
+		<th scope="row">詳細情報</th>
+		<td><?= $this->Text->autoParagraph(h($biditem->description)) ?></td>
+	</tr>
+	<tr>
 		<th scope="row">終了時間</th>
 		<td><?= h($biditem->endtime) ?></td>
 	</tr>
