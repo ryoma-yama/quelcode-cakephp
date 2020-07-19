@@ -90,14 +90,30 @@ class AuctionController extends AuctionBaseController
         $biditem = $this->Biditems->newEntity();
         // POST送信時の処理
         if ($this->request->is('post')) {
-            // $biditemにフォームの送信内容を反映
-            $biditem = $this->Biditems->patchEntity($biditem, $this->request->getData());
-            // $biditemを保存する
-            if ($this->Biditems->save($biditem)) {
-                // 成功時のメッセージ
-                $this->Flash->success(__('保存しました。'));
-                // トップページ（index）に移動
-                return $this->redirect(['action' => 'index']);
+            // 画像の拡張子をチェックする
+            $uploadedFile = $this->request->getData('img_path');
+            if (!empty($uploadedFile['name'])) {
+                $approvedExtension = ['jpg', 'JPG', 'gif', 'GIF', 'png', 'PNG'];
+                $uploadedFileExtension = substr($uploadedFile['name'], -3);
+                if ((in_array($uploadedFileExtension, $approvedExtension, 1))) {
+                    // $biditemにフォームの送信内容を反映
+                    $biditem = $this->Biditems->patchEntity($biditem, $this->request->getData());
+                    $biditem['img_path'] = "temporaryValue";
+                    // $biditemを保存する
+                    if ($this->Biditems->save($biditem)) {
+                        // $biditemの保存により生成されたidを, 画像ファイル名に使用して保存
+                        $biditem_id = $biditem->id;
+                        $destination = '../webroot/img/auction/' . $biditem_id . '.' . $uploadedFileExtension;
+                        move_uploaded_file($uploadedFile['tmp_name'], $destination);
+                        // DataBaseのimg_pathカラムの値を新しい画像ファイル名に更新
+                        $biditem['img_path'] = $biditem_id . '.' . $uploadedFileExtension;
+                        $this->Biditems->save($biditem);
+                        // 成功時のメッセージ
+                        $this->Flash->success(__('保存しました。'));
+                        // トップページ（index）に移動
+                        return $this->redirect(['action' => 'index']);
+                    }
+                }
             }
             // 失敗時のメッセージ
             $this->Flash->error(__('保存に失敗しました。もう一度入力下さい。'));
@@ -105,7 +121,6 @@ class AuctionController extends AuctionBaseController
         // 値を保管
         $this->set(compact('biditem'));
     }
-
     // 入札の処理
     public function bid($biditem_id = null)
     {
