@@ -79,8 +79,10 @@ class AuctionController extends AuctionBaseController
             'contain' => ['Users'],
             'order' => ['price' => 'desc']
         ])->toArray();
+        // オークション終了時刻までのカウントダウンタイマー用に終了時刻をセットする
+        $serverCurrentTime = new \Datetime('now');
         // オブジェクト類をテンプレート用に設定
-        $this->set(compact('biditem', 'bidrequests'));
+        $this->set(compact('biditem', 'bidrequests', 'serverCurrentTime'));
     }
 
     // 出品する処理
