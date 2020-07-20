@@ -21,6 +21,10 @@
 		<td><?= $this->Html->image('auction/' . $biditem->img_path) ?></td>
 	</tr>
 	<tr>
+		<th scope="row">終了まで</th>
+		<td id="timer"></td>
+	</tr>
+	<tr>
 		<th scope="row">終了時間</th>
 		<td><?= h($biditem->endtime) ?></td>
 	</tr>
@@ -82,3 +86,8 @@
 		<p><?= '※入札は、終了しました。' ?></p>
 	<?php endif; ?>
 </div>
+<script>
+	var currentTime = "<?= $serverCurrentTime->format('Y-m-d H:i:s') ?>";
+	var endTime = "<?= $biditem->endtime ?>";
+</script>
+<?= $this->Html->script('/js/countDownTimer.js') ?>
