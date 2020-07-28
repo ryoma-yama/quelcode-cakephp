@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
@@ -71,6 +72,36 @@ class BidinfoTable extends Table
             ->integer('price')
             ->requirePresence('price', 'create')
             ->notEmptyString('price');
+
+        $validator
+            ->dateTime('modified')
+            ->requirePresence('modified', 'create')
+            ->notEmptyDateTime('modified');
+
+        $validator
+            ->maxLength('receiver_name', 100)
+            ->requirePresence('receiver_name', 'update')
+            ->notEmptyString('receiver_name');
+
+        $validator
+            ->maxLength('receiver_address', 100)
+            ->requirePresence('receiver_address', 'update')
+            ->notEmptyString('receiver_address');
+
+        $validator
+            ->maxLength('receiver_phone_number', 13)
+            ->requirePresence('receiver_phone_number', 'update')
+            ->notEmptyString('receiver_phone_number');
+
+        $validator
+            ->boolean('is_shipped')
+            ->requirePresence('is_shipped', 'create')
+            ->notEmptyString('is_shipped');
+
+        $validator
+            ->boolean('is_received')
+            ->requirePresence('is_received', 'create')
+            ->notEmptyString('is_received');
 
         return $validator;
     }
