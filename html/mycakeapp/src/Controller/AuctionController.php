@@ -205,4 +205,18 @@ class AuctionController extends AuctionBaseController
         ])->toArray();
         $this->set(compact('biditems'));
     }
+
+    // 発送と受取の連絡をする
+    public function shipmentAndReceipt($bidinfo_id = null)
+    {
+        $sellerAndBuyer = $this->Bidinfo->get($bidinfo_id, [
+            'contain' => ['Biditems']
+        ]);
+        $seller = $sellerAndBuyer->biditem->user_id;
+        $buyer = $sellerAndBuyer->user_id;
+        if ($seller === $this->Auth->user('id') || $buyer === $this->Auth->user('id')) {
+        } else {
+            return $this->redirect(['action' => 'index']);
+        }
+    }
 }
