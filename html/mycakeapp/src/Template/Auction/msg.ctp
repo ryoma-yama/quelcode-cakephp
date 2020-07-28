@@ -1,5 +1,6 @@
 <?php if (!empty($bidinfo)) : ?>
 	<h2>商品「<?= $bidinfo->biditem->name ?>」</h2>
+	<p><?= $this->Html->link(__('商品受け渡しの手続きをする'), ['action' => 'shipmentAndReceipt', $bidinfo->id]); ?></p>
 	<h3>※メッセージ情報</h3>
 	<h6>※メッセージを送信する</h6>
 	<?= $this->Form->create($bidmsg) ?>
