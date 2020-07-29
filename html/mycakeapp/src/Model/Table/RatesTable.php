@@ -10,9 +10,8 @@ use Cake\Validation\Validator;
 /**
  * Rates Model
  *
- * @property \App\Model\Table\RatersTable&\Cake\ORM\Association\BelongsTo $Raters
- * @property \App\Model\Table\RateesTable&\Cake\ORM\Association\BelongsTo $Ratees
- * @property \App\Model\Table\BidinfosTable&\Cake\ORM\Association\BelongsTo $Bidinfos
+ * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
+ * @property \App\Model\Table\BidinfoTable&\Cake\ORM\Association\BelongsTo $Bidinfo
  *
  * @method \App\Model\Entity\Rate get($primaryKey, $options = [])
  * @method \App\Model\Entity\Rate newEntity($data = null, array $options = [])
@@ -43,15 +42,15 @@ class RatesTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Raters', [
+        $this->belongsTo('Users', [
             'foreignKey' => 'rater_id',
             'joinType' => 'INNER',
         ]);
-        $this->belongsTo('Ratees', [
+        $this->belongsTo('Users', [
             'foreignKey' => 'ratee_id',
             'joinType' => 'INNER',
         ]);
-        $this->belongsTo('Bidinfos', [
+        $this->belongsTo('Bidinfo', [
             'foreignKey' => 'bidinfo_id',
             'joinType' => 'INNER',
         ]);
@@ -92,9 +91,9 @@ class RatesTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['rater_id'], 'Raters'));
-        $rules->add($rules->existsIn(['ratee_id'], 'Ratees'));
-        $rules->add($rules->existsIn(['bidinfo_id'], 'Bidinfos'));
+        $rules->add($rules->existsIn(['rater_id'], 'Users'));
+        $rules->add($rules->existsIn(['ratee_id'], 'Users'));
+        $rules->add($rules->existsIn(['bidinfo_id'], 'Bidinfo'));
 
         return $rules;
     }

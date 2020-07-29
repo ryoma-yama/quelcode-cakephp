@@ -16,8 +16,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\Time $created
  * @property \Cake\I18n\Time $modified
  *
- * @property \App\Model\Entity\Rater $rater
- * @property \App\Model\Entity\Ratee $ratee
+ * @property \App\Model\Entity\User $user
  * @property \App\Model\Entity\Bidinfo $bidinfo
  */
 class Rate extends Entity
@@ -39,8 +38,7 @@ class Rate extends Entity
         'rate_comment' => true,
         'created' => true,
         'modified' => true,
-        'rater' => true,
-        'ratee' => true,
+        'user' => true,
         'bidinfo' => true,
     ];
 }

@@ -21,7 +21,7 @@ class RatesController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Raters', 'Ratees', 'Bidinfos'],
+            'contain' => ['Users', 'Bidinfo'],
         ];
         $rates = $this->paginate($this->Rates);
 
@@ -38,7 +38,7 @@ class RatesController extends AppController
     public function view($id = null)
     {
         $rate = $this->Rates->get($id, [
-            'contain' => ['Raters', 'Ratees', 'Bidinfos'],
+            'contain' => ['Users', 'Bidinfo'],
         ]);
 
         $this->set('rate', $rate);
@@ -61,9 +61,9 @@ class RatesController extends AppController
             }
             $this->Flash->error(__('The rate could not be saved. Please, try again.'));
         }
-        $raters = $this->Rates->Raters->find('list', ['limit' => 200]);
-        $ratees = $this->Rates->Ratees->find('list', ['limit' => 200]);
-        $bidinfos = $this->Rates->Bidinfos->find('list', ['limit' => 200]);
+        $raters = $this->Rates->Users->find('list', ['limit' => 200]);
+        $ratees = $this->Rates->Users->find('list', ['limit' => 200]);
+        $bidinfos = $this->Rates->Bidinfo->find('list', ['limit' => 200]);
         $this->set(compact('rate', 'raters', 'ratees', 'bidinfos'));
     }
 
@@ -88,9 +88,9 @@ class RatesController extends AppController
             }
             $this->Flash->error(__('The rate could not be saved. Please, try again.'));
         }
-        $raters = $this->Rates->Raters->find('list', ['limit' => 200]);
-        $ratees = $this->Rates->Ratees->find('list', ['limit' => 200]);
-        $bidinfos = $this->Rates->Bidinfos->find('list', ['limit' => 200]);
+        $raters = $this->Rates->Users->find('list', ['limit' => 200]);
+        $ratees = $this->Rates->Users->find('list', ['limit' => 200]);
+        $bidinfos = $this->Rates->Bidinfo->find('list', ['limit' => 200]);
         $this->set(compact('rate', 'raters', 'ratees', 'bidinfos'));
     }
 
