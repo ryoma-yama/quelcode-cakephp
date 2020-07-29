@@ -209,12 +209,28 @@ class AuctionController extends AuctionBaseController
     // 発送と受取の連絡をする
     public function shipmentAndReceipt($bidinfo_id = null)
     {
-        $sellerAndBuyer = $this->Bidinfo->get($bidinfo_id, [
+
+        $bidinfo = $this->Bidinfo->get($bidinfo_id, [
             'contain' => ['Biditems']
         ]);
-        $seller = $sellerAndBuyer->biditem->user_id;
-        $buyer = $sellerAndBuyer->user_id;
-        if ($seller === $this->Auth->user('id') || $buyer === $this->Auth->user('id')) {
+        $seller = $bidinfo->biditem->user_id;
+        $buyer = $bidinfo->user_id;
+        if ($seller === $this->Auth->user('id')) {
+            $this->set('is_seller', true);
+        } else if ($buyer === $this->Auth->user('id')) {
+            $this->set('is_buyer', true);
+            if ($this->request->is('put')) {
+                $bidinfo = $this->Bidinfo->patchEntity($bidinfo, $this->request->getData());
+                // 保存する
+                if ($this->Bidinfo->save($bidinfo)) {
+                    $this->Flash->success(__('保存しました。'));
+                    // 同じページに戻る
+                    return $this->redirect($this->request->referer());
+                } else {
+                    $this->Flash->error(__('保存に失敗しました。もう一度入力下さい。'));
+                }
+            }
+            $this->set(compact('bidinfo'));
         } else {
             return $this->redirect(['action' => 'index']);
         }
