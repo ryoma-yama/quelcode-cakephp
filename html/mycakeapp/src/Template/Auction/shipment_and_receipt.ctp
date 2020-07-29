@@ -1,5 +1,21 @@
 <h2>発送および受取の連絡をする</h2>
 <?php if (($is_seller ?? false) === true) : ?>
+    <?php if (!empty($bidinfo->receiver_name)) : ?>
+        <?= $this->Form->create($bidinfo) ?>
+        <?= $this->Form->hidden('receiver_name', ['value' => $bidinfo->receiver_name]); ?>
+        <?= $this->Form->hidden('receiver_address', ['value' => $bidinfo->receiver_address]); ?>
+        <?= $this->Form->hidden('receiver_phone_number', ['value' => $bidinfo->receiver_phone_number]); ?>
+        <?= $this->Form->hidden('is_shipped', ['value' => true]); ?>
+        <?= $this->Form->button(__('発送しました')) ?>
+        <?= $this->Form->end() ?>
+        <table>
+            <caption>受取人情報</caption>
+            <?php
+            echo $this->Html->tableHeaders(['名前', '住所', '電話番号']);
+            echo $this->Html->tableCells([$bidinfo->receiver_name, $bidinfo->receiver_address, $bidinfo->receiver_phone_number]);
+            ?>
+        </table>
+    <?php endif; ?>
 <?php endif; ?>
 <?php if (($is_buyer ?? false) === true) : ?>
     <?php if (!empty($bidinfo->receiver_name)) : ?>
