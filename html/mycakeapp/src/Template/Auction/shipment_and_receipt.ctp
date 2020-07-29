@@ -1,6 +1,8 @@
 <h2>発送および受取の連絡をする</h2>
 <?php if (($is_seller ?? false) === true) : ?>
-    <?php if ($bidinfo->is_shipped) : ?>
+    <?php if ($bidinfo->is_received) : ?>
+        <p>落札者評価を行ってください</p>
+    <?php elseif ($bidinfo->is_shipped) : ?>
         <p>配送中です</p>
     <?php elseif (!empty($bidinfo->receiver_name) && !$bidinfo->is_shipped) : ?>
         <?= $this->Form->create($bidinfo) ?>
@@ -22,7 +24,9 @@
     <?php endif; ?>
 <?php endif; ?>
 <?php if (($is_buyer ?? false) === true) : ?>
-    <?php if ($bidinfo->is_shipped) : ?>
+    <?php if ($bidinfo->is_received) : ?>
+        <p>出品者評価を行ってください</p>
+    <?php elseif ($bidinfo->is_shipped) : ?>
         <p>出品者が商品を発送しました</p>
         <?= $this->Form->create($bidinfo) ?>
         <?= $this->Form->hidden('receiver_name', ['value' => $bidinfo->receiver_name]); ?>
