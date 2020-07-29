@@ -217,6 +217,18 @@ class AuctionController extends AuctionBaseController
         $buyer = $bidinfo->user_id;
         if ($seller === $this->Auth->user('id')) {
             $this->set('is_seller', true);
+            if ($this->request->is('put')) {
+                $bidinfo = $this->Bidinfo->patchEntity($bidinfo, $this->request->getData());
+                // 保存する
+                if ($this->Bidinfo->save($bidinfo)) {
+                    $this->Flash->success(__('保存しました。'));
+                    // 同じページに戻る
+                    return $this->redirect($this->request->referer());
+                } else {
+                    $this->Flash->error(__('保存に失敗しました。もう一度入力下さい。'));
+                }
+            }
+            $this->set(compact('bidinfo'));
         } else if ($buyer === $this->Auth->user('id')) {
             $this->set('is_buyer', true);
             if ($this->request->is('put')) {
