@@ -17,6 +17,8 @@
             echo $this->Html->tableCells([$bidinfo->receiver_name, $bidinfo->receiver_address, $bidinfo->receiver_phone_number]);
             ?>
         </table>
+    <?php else : ?>
+        <p>発送先情報が来ていません</p>
     <?php endif; ?>
 <?php endif; ?>
 <?php if (($is_buyer ?? false) === true) : ?>
