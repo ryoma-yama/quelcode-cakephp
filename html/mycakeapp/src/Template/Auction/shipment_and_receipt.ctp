@@ -4,7 +4,7 @@
         <p>落札者評価を行ってください</p>
     <?php elseif ($bidinfo->is_shipped) : ?>
         <p>配送中です</p>
-    <?php elseif (!empty($bidinfo->receiver_name) && !$bidinfo->is_shipped) : ?>
+    <?php elseif (!empty($bidinfo->receiver_name)) : ?>
         <?= $this->Form->create($bidinfo) ?>
         <?= $this->Form->hidden('receiver_name', ['value' => $bidinfo->receiver_name]); ?>
         <?= $this->Form->hidden('receiver_address', ['value' => $bidinfo->receiver_address]); ?>
@@ -35,7 +35,7 @@
         <?= $this->Form->hidden('is_received', ['value' => true]); ?>
         <?= $this->Form->button(__('受け取りました')) ?>
         <?= $this->Form->end() ?>
-    <?php elseif (!empty($bidinfo->receiver_name) && !$bidinfo->is_shipped) : ?>
+    <?php elseif (!empty($bidinfo->receiver_name)) : ?>
         <p>出品者に発送先の情報を連絡しました</p>
     <?php else : ?>
         <?= $this->Form->create($bidinfo) ?>
