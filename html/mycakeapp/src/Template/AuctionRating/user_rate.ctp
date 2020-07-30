@@ -1,0 +1,1 @@
+<h2><?= $userPagesUser->username ?></h2>
