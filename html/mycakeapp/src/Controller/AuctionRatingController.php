@@ -69,7 +69,13 @@ class AuctionRatingController extends AuctionBaseController
         try {
             // このページで表示するユーザー名を取得
             $userPagesUser = $this->Users->get($user_id);
-            $this->set(compact('userPagesUser'));
+            // 全評価を平均して小数点第二位で四捨五入する
+            $query = $this->Rates->find();
+            $overallRating = $query->select(['AVG' => $query->func()->avg('rate_value')])
+                ->contain(['users'])
+                ->where(['Users.id' => $user_id])->first();
+            $overallRating = round($overallRating['AVG'], 1);
+            $this->set(compact('userPagesUser', 'overallRating'));
         } catch (Exception $e) {
             return $this->redirect(['controller' => 'Auction', 'action' => 'index']);
         }
