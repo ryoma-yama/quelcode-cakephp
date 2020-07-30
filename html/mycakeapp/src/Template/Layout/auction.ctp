@@ -38,6 +38,7 @@
 		<nav class="large-2 medium-3 columns sidebar" id="actions-sidebar">
 			<ul class="side-nav">
 				<li class="heading"><?= __('Actions') ?></li>
+				<li><?= $this->Html->link(__('あなたの取引評価'), ['controller' => 'AuctionRating', 'action' => 'userRate', $authuser['id']]) ?></li>
 				<li><?= $this->Html->link(__('あなたの落札情報'), ['controller' => 'Auction', 'action' => 'home']) ?></li>
 				<li><?= $this->Html->link(__('あなたの出品情報'), ['controller' => 'Auction', 'action' => 'home2']) ?></li>
 				<li><?= $this->Html->link(__('商品を出品する'), ['controller' => 'Auction', 'action' => 'add']) ?></li>
