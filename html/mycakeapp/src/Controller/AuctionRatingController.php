@@ -63,4 +63,15 @@ class AuctionRatingController extends AuctionBaseController
             return $this->redirect(['controller' => 'Auction', 'action' => 'index']);
         }
     }
+
+    public function userRate($user_id = null)
+    {
+        try {
+            // このページで表示するユーザー名を取得
+            $userPagesUser = $this->Users->get($user_id);
+            $this->set(compact('userPagesUser'));
+        } catch (Exception $e) {
+            return $this->redirect(['controller' => 'Auction', 'action' => 'index']);
+        }
+    }
 }
