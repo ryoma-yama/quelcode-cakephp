@@ -32,13 +32,26 @@ class AuctionRatingController extends AuctionBaseController
             ]);
             $seller = $bidinfo->biditem->user_id;
             $buyer = $bidinfo->user_id;
+            // アクセス制御
             if ($seller === $this->Auth->user('id')) {
-                $this->set('is_seller', true);
+                $this->set(compact('buyer'));
             } else if ($buyer === $this->Auth->user('id')) {
-                $this->set('is_buyer', true);
+                $this->set(compact('seller'));
             } else {
                 return $this->redirect(['controller' => 'Auction', 'action' => 'index']);
             }
+            $rate = $this->Rates->newEntity();
+            // post時の処理
+            if ($this->request->is('post')) {
+                $rate = $this->Rates->patchEntity($rate, $this->request->getData());
+                if ($this->Rates->save($rate)) {
+                    $this->Flash->success(__('保存しました。'));
+                    return $this->redirect($this->request->referer());
+                } else {
+                    $this->Flash->error(__('保存に失敗しました。もう一度入力下さい。'));
+                }
+            }
+            $this->set(compact('bidinfo', 'rate'));
         } catch (Exception $e) {
             return $this->redirect(['controller' => 'Auction', 'action' => 'index']);
         }
