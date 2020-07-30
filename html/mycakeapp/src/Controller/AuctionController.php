@@ -23,6 +23,7 @@ class AuctionController extends AuctionBaseController
         $this->loadModel('Bidrequests');
         $this->loadModel('Bidinfo');
         $this->loadModel('Bidmessages');
+        $this->loadModel('Rates');
         // ログインしているユーザー情報をauthuserに設定
         $this->set('authuser', $this->Auth->user());
         // レイアウトをauctionに変更
@@ -215,6 +216,13 @@ class AuctionController extends AuctionBaseController
             ]);
             $seller = $bidinfo->biditem->user_id;
             $buyer = $bidinfo->user_id;
+            // この取引を評価済みかどうか
+            $is_rated = $this->Rates->find('all', [
+                'conditions' => ['rater_id' => $this->Auth->user('id'), 'bidinfo_id' => $bidinfo_id]
+            ])->first();
+            if ($is_rated ?? false) {
+                $this->set('is_rated', true);
+            }
             if ($seller === $this->Auth->user('id')) {
                 $this->set('is_seller', true);
                 if ($this->request->is('put')) {
@@ -242,7 +250,7 @@ class AuctionController extends AuctionBaseController
                         $this->Flash->error(__('保存に失敗しました。もう一度入力下さい。'));
                     }
                 }
-                $this->set(compact('bidinfo'));
+                $this->set(compact('bidinfo', 'is_rated'));
             } else {
                 return $this->redirect(['action' => 'index']);
             }
