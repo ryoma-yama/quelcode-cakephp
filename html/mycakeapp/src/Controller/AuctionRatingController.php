@@ -32,6 +32,13 @@ class AuctionRatingController extends AuctionBaseController
             ]);
             $seller = $bidinfo->biditem->user_id;
             $buyer = $bidinfo->user_id;
+            // この取引を評価済みであればインデックスへリダイレクトする
+            $is_rated = $this->Rates->find('all', [
+                'conditions' => ['rater_id' => $this->Auth->user('id'), 'bidinfo_id' => $bidinfo_id]
+            ])->first();
+            if ($is_rated ?? false) {
+                return $this->redirect(['controller' => 'Auction', 'action' => 'index']);
+            }
             // アクセス制御
             if ($seller === $this->Auth->user('id')) {
                 $this->set(compact('buyer'));
