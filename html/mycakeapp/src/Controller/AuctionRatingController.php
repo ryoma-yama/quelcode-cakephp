@@ -76,6 +76,23 @@ class AuctionRatingController extends AuctionBaseController
                 ->where(['Users.id' => $user_id])->first();
             $overallRating = round($overallRating['AVG'], 1);
             $this->set(compact('userPagesUser', 'overallRating'));
+            // 取引評価の一覧をページネーションで取得
+            $mode = $this->request->getQuery('mode');
+            $rateQuery = $this->Rates->find()
+                ->select(['Rates.rate_value', 'Rates.rate_comment', 'users.username', 'Bidinfo.user_id', 'Biditems.name'])
+                ->join(['table' => 'users', 'type' => 'INNER', 'conditions' => 'Rates.rater_id = users.id'])
+                ->contain(['Bidinfo', 'Bidinfo.Biditems'])
+                ->order(['Rates.created' => 'desc'])
+                ->limit(10)
+                ->where(['Rates.ratee_id' => $user_id]);
+            // 取引評価一覧の表示形式
+            if ($mode === 'buyer') {
+                $rateQuery = $rateQuery->where(['Bidinfo.user_id' => $user_id]);
+            } elseif ($mode === 'seller') {
+                $rateQuery = $rateQuery->where(['Bidinfo.user_id' != $user_id]);
+            }
+            $rates = $this->paginate($rateQuery)->toArray();
+            $this->set(compact('rates'));
         } catch (Exception $e) {
             return $this->redirect(['controller' => 'Auction', 'action' => 'index']);
         }
