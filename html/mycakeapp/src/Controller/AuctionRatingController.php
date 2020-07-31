@@ -89,7 +89,7 @@ class AuctionRatingController extends AuctionBaseController
             if ($mode === 'buyer') {
                 $rateQuery = $rateQuery->where(['Bidinfo.user_id' => $user_id]);
             } elseif ($mode === 'seller') {
-                $rateQuery = $rateQuery->where(['Bidinfo.user_id' != $user_id]);
+                $rateQuery = $rateQuery->where(['Bidinfo.user_id IS NOT' => $user_id]);
             }
             $rates = $this->paginate($rateQuery)->toArray();
             $this->set(compact('rates'));
