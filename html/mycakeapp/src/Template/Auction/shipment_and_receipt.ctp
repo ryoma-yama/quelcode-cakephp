@@ -17,10 +17,12 @@
         <?= $this->Form->end() ?>
         <table>
             <caption>受取人情報</caption>
-            <?php
-            echo $this->Html->tableHeaders(['名前', '住所', '電話番号']);
-            echo $this->Html->tableCells([$bidinfo->receiver_name, $bidinfo->receiver_address, $bidinfo->receiver_phone_number]);
-            ?>
+            <?= $this->Html->tableHeaders(['名前', '住所', '電話番号']) ?>
+            <?= $this->Html->tableCells([
+                h($bidinfo->receiver_name),
+                h($bidinfo->receiver_address),
+                h($bidinfo->receiver_phone_number)
+            ]) ?>
         </table>
     <?php else : ?>
         <p>発送先情報が来ていません</p>
