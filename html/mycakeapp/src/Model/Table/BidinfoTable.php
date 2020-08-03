@@ -80,18 +80,15 @@ class BidinfoTable extends Table
 
         $validator
             ->maxLength('receiver_name', 100)
-            ->requirePresence('receiver_name', 'update')
-            ->notEmptyString('receiver_name');
+            ->requirePresence('receiver_name', 'update');
 
         $validator
             ->maxLength('receiver_address', 100)
-            ->requirePresence('receiver_address', 'update')
-            ->notEmptyString('receiver_address');
+            ->requirePresence('receiver_address', 'update');
 
         $validator
             ->maxLength('receiver_phone_number', 13)
-            ->requirePresence('receiver_phone_number', 'update')
-            ->notEmptyString('receiver_phone_number');
+            ->requirePresence('receiver_phone_number', 'update');
 
         $validator
             ->boolean('is_shipped')
