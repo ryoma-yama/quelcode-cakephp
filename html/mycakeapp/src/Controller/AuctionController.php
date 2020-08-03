@@ -69,6 +69,9 @@ class AuctionController extends AuctionBaseController
                 $bidinfo->user_id = $bidrequest->user->id;
                 $bidinfo->user = $bidrequest->user;
                 $bidinfo->price = $bidrequest->price;
+                $bidinfo->receiver_name = '';
+                $bidinfo->receiver_address = '';
+                $bidinfo->receiver_phone_number = '';
                 $this->Bidinfo->save($bidinfo);
             }
             // Biditemのbidinfoに$bidinfoを設定
