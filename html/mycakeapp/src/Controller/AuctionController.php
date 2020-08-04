@@ -23,6 +23,7 @@ class AuctionController extends AuctionBaseController
         $this->loadModel('Bidrequests');
         $this->loadModel('Bidinfo');
         $this->loadModel('Bidmessages');
+        $this->loadModel('Rates');
         // ログインしているユーザー情報をauthuserに設定
         $this->set('authuser', $this->Auth->user());
         // レイアウトをauctionに変更
@@ -68,6 +69,9 @@ class AuctionController extends AuctionBaseController
                 $bidinfo->user_id = $bidrequest->user->id;
                 $bidinfo->user = $bidrequest->user;
                 $bidinfo->price = $bidrequest->price;
+                $bidinfo->receiver_name = '';
+                $bidinfo->receiver_address = '';
+                $bidinfo->receiver_phone_number = '';
                 $this->Bidinfo->save($bidinfo);
             }
             // Biditemのbidinfoに$bidinfoを設定
@@ -204,5 +208,47 @@ class AuctionController extends AuctionBaseController
             'limit' => 10
         ])->toArray();
         $this->set(compact('biditems'));
+    }
+
+    // 発送と受取の連絡をする
+    public function shipmentAndReceipt($bidinfo_id = null)
+    {
+        try {
+            $bidinfo = $this->Bidinfo->get($bidinfo_id, [
+                'contain' => ['Biditems']
+            ]);
+            $seller = $bidinfo->biditem->user_id;
+            $buyer = $bidinfo->user_id;
+            // この取引を評価済みかどうか
+            $is_rated = $this->Rates->find('all', [
+                'conditions' => ['rater_id' => $this->Auth->user('id'), 'bidinfo_id' => $bidinfo_id]
+            ])->first();
+            if ($is_rated ?? false) {
+                $this->set('is_rated', true);
+            }
+            // アクセス制御
+            if ($seller === $this->Auth->user('id')) {
+                $this->set('is_seller', true);
+            } else if ($buyer === $this->Auth->user('id')) {
+                $this->set('is_buyer', true);
+            } else {
+                return $this->redirect(['action' => 'index']);
+            }
+            // put時の処理
+            if ($this->request->is('put')) {
+                $bidinfo = $this->Bidinfo->patchEntity($bidinfo, $this->request->getData());
+                // 保存する
+                if ($this->Bidinfo->save($bidinfo)) {
+                    $this->Flash->success(__('保存しました。'));
+                    // 同じページに戻る
+                    return $this->redirect($this->request->referer());
+                } else {
+                    $this->Flash->error(__('保存に失敗しました。もう一度入力下さい。'));
+                }
+            }
+            $this->set(compact('bidinfo', 'is_rated'));
+        } catch (Exception $e) {
+            return $this->redirect(['action' => 'index']);
+        }
     }
 }
