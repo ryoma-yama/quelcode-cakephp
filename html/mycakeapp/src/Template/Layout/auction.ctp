@@ -43,6 +43,7 @@
 				<li><?= $this->Html->link(__('あなたの出品情報'), ['controller' => 'Auction', 'action' => 'home2']) ?></li>
 				<li><?= $this->Html->link(__('商品を出品する'), ['controller' => 'Auction', 'action' => 'add']) ?></li>
 				<li><?= $this->Html->link(__('商品リストを見る'), ['controller' => 'Auction', 'action' => 'index']) ?></li>
+				<li><?= $this->Html->link(__('ログアウトする'), ['controller' => 'Auction', 'action' => 'logout']) ?></li>
 			</ul>
 		</nav>
 	</div>
